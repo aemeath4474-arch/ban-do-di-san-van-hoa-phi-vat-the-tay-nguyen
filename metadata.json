@@ -1,0 +1,6 @@
+{
+  "name": "Bản đồ Di sản Phi vật thể theo Vùng văn hoá",
+  "description": "Nền tảng số hoá, tra cứu bản đồ và lưu trữ dữ liệu di sản văn hoá phi vật thể Việt Nam - Đề tài J02: Nghiên cứu Vùng văn hoá Tây Nguyên và cộng đồng người Ê Đê tại tỉnh Đắk Lắk.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

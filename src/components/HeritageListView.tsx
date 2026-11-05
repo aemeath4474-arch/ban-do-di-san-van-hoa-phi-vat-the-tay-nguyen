@@ -30,6 +30,7 @@ export const HeritageListView: React.FC<HeritageListViewProps> = ({
   const [filterLocality, setFilterLocality] = useState('Tất cả');
   const [filterCategory, setFilterCategory] = useState('Tất cả');
   const [filterStatus, setFilterStatus] = useState('Tất cả');
+  const [filterVerificationStatus, setFilterVerificationStatus] = useState('Tất cả');
   const [filterSurveyStatus, setFilterSurveyStatus] = useState('Tất cả');
   const [sortBy, setSortBy] = useState<'ten_az' | 'ten_za' | 'dia_phuong'>('ten_az');
 
@@ -68,7 +69,8 @@ export const HeritageListView: React.FC<HeritageListViewProps> = ({
           h.ten_ban_dia.toLowerCase().includes(query) ||
           h.dia_danh_hien_nay.toLowerCase().includes(query) ||
           (h.buon_lang && h.buon_lang.toLowerCase().includes(query)) ||
-          h.mo_ta.toLowerCase().includes(query);
+          h.mo_ta.toLowerCase().includes(query) ||
+          (h.ma_tu_lieu && h.ma_tu_lieu.toLowerCase().includes(query));
 
         const matchesRegion = filterRegion === 'Tất cả' || h.vung_van_hoa === filterRegion;
         const matchesEthnicity = filterEthnicity === 'Tất cả' || h.dan_toc.includes(filterEthnicity);
@@ -80,12 +82,15 @@ export const HeritageListView: React.FC<HeritageListViewProps> = ({
 
         const matchesStatus =
           filterStatus === 'Tất cả' ||
-          (filterStatus === 'UNESCO' && h.tinh_trang_ghi_danh.includes('UNESCO')) ||
-          (filterStatus === 'Quốc gia' && h.tinh_trang_ghi_danh.includes('quốc gia')) ||
-          (filterStatus === 'Kiểm kê' && (h.tinh_trang_ghi_danh.includes('kiểm kê') || h.tinh_trang_ghi_danh.includes('Lập hồ sơ')));
+          (filterStatus === 'UNESCO' && (h.tinh_trang_ghi_danh?.includes('UNESCO') || h.tinh_trang_bao_ton?.includes('UNESCO'))) ||
+          (filterStatus === 'Quốc gia' && (h.tinh_trang_ghi_danh?.includes('quốc gia') || h.tinh_trang_bao_ton?.includes('quốc gia'))) ||
+          (filterStatus === 'Kiểm kê' && (h.tinh_trang_ghi_danh?.includes('kiểm kê') || h.tinh_trang_ghi_danh?.includes('Lập hồ sơ') || h.tinh_trang_bao_ton?.includes('kiểm kê')));
 
         const matchesSurveyStatus =
           filterSurveyStatus === 'Tất cả' || h.trang_thai_dia_ban === filterSurveyStatus;
+
+        const matchesVerification =
+          filterVerificationStatus === 'Tất cả' || h.trang_thai_tham_dinh === filterVerificationStatus;
 
         return (
           matchesSearch &&
@@ -94,7 +99,8 @@ export const HeritageListView: React.FC<HeritageListViewProps> = ({
           matchesCategory &&
           matchesLocality &&
           matchesStatus &&
-          matchesSurveyStatus
+          matchesSurveyStatus &&
+          matchesVerification
         );
       })
       .sort((a, b) => {
@@ -115,6 +121,7 @@ export const HeritageListView: React.FC<HeritageListViewProps> = ({
     filterLocality,
     filterStatus,
     filterSurveyStatus,
+    filterVerificationStatus,
     sortBy,
   ]);
 
@@ -202,6 +209,21 @@ export const HeritageListView: React.FC<HeritageListViewProps> = ({
               <option value="Địa bàn khảo sát dự kiến">Địa bàn khảo sát dự kiến</option>
               <option value="Đang xác minh địa bàn">Đang xác minh địa bàn</option>
               <option value="Đã xác minh">Đã xác minh</option>
+            </select>
+          </div>
+
+          {/* Trạng thái thẩm định khoa học */}
+          <div>
+            <label className="block text-[11px] font-semibold text-[#6C5B4E] mb-1">Thẩm định dữ liệu</label>
+            <select
+              value={filterVerificationStatus}
+              onChange={(e) => setFilterVerificationStatus(e.target.value)}
+              className="w-full bg-[#FAF7F2] border border-[#D5C6AF] text-[#3B281B] text-xs rounded-lg px-2.5 py-2 focus:ring-2 focus:ring-[#B33927] focus:outline-hidden font-medium"
+            >
+              <option value="Tất cả">Tất cả thẩm định</option>
+              <option value="Đã xác minh">✓ Đã xác minh</option>
+              <option value="Đã có nhưng cần xác minh">⚠ Cần xác minh thêm</option>
+              <option value="Chưa xác minh">? Chưa xác minh</option>
             </select>
           </div>
 
@@ -295,13 +317,29 @@ export const HeritageListView: React.FC<HeritageListViewProps> = ({
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent"></div>
 
-                {/* Survey Status Badge */}
-                <div className="absolute top-3 left-3 bg-[#B33927] text-white text-[10.5px] font-bold px-2 py-0.5 rounded-full shadow-xs">
-                  {heritage.trang_thai_dia_ban}
+                {/* Top Badges: Survey status + Verification status */}
+                <div className="absolute top-3 left-3 flex flex-col gap-1 items-start">
+                  <div className="bg-[#B33927] text-white text-[10.5px] font-bold px-2 py-0.5 rounded-full shadow-xs">
+                    {heritage.trang_thai_dia_ban}
+                  </div>
+                  <div className={`text-[10px] font-bold px-2 py-0.5 rounded-full shadow-xs ${
+                    heritage.trang_thai_tham_dinh === 'Đã xác minh'
+                      ? 'bg-emerald-600 text-white'
+                      : heritage.trang_thai_tham_dinh === 'Đã có nhưng cần xác minh'
+                      ? 'bg-amber-600 text-white'
+                      : 'bg-stone-600 text-white'
+                  }`}>
+                    {heritage.trang_thai_tham_dinh === 'Đã xác minh' ? '✓ Đã xác minh' : '⚠ Cần xác minh thêm'}
+                  </div>
                 </div>
 
                 {/* Media indicators */}
                 <div className="absolute top-3 right-3 flex items-center gap-1.5">
+                  {heritage.la_du_lieu_minh_hoa && (
+                    <span className="px-1.5 py-0.5 rounded-md bg-black/60 text-amber-200 text-[9.5px] font-medium backdrop-blur-xs">
+                      Ảnh minh họa
+                    </span>
+                  )}
                   {heritage.am_thanh && (
                     <span className="p-1 rounded-md bg-black/50 text-white backdrop-blur-xs" title="Có tư liệu âm thanh">
                       <Volume2 className="w-3.5 h-3.5" />
@@ -320,7 +358,7 @@ export const HeritageListView: React.FC<HeritageListViewProps> = ({
                     {heritage.loai_hinh}
                   </span>
                   <span className="text-[10px] font-bold text-amber-300 bg-black/60 px-2 py-0.5 rounded-sm">
-                    {heritage.id}
+                    {heritage.ma_tu_lieu || heritage.id}
                   </span>
                 </div>
               </div>
@@ -340,6 +378,13 @@ export const HeritageListView: React.FC<HeritageListViewProps> = ({
                   <p className="text-xs text-[#635347] line-clamp-3 leading-relaxed">
                     {heritage.mo_ta}
                   </p>
+
+                  {/* Verification Scope Box */}
+                  {heritage.pham_vi_xac_minh && (
+                    <div className="p-2 rounded-lg bg-[#FAF7F2] border border-[#E8DEC8] text-[11px] text-[#6C5B4E] leading-tight">
+                      <strong className="text-[#992E20]">Phạm vi xác minh:</strong> {heritage.pham_vi_xac_minh}
+                    </div>
+                  )}
                 </div>
 
                 {/* Administrative and buôn stratification */}

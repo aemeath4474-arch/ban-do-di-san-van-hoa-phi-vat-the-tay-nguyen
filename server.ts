@@ -92,23 +92,23 @@ app.post('/api/ask-gemini', async (req, res) => {
 
     const dataContext = JSON.stringify(relevantRecords, null, 2);
 
-    const systemInstruction = `Bạn là trợ lý AI chuyên môn về số hoá và lưu trữ di sản văn hoá phi vật thể Việt Nam trong ứng dụng "Bản đồ di sản phi vật thể theo vùng văn hoá". 
-Dự án tập trung vào: Vùng văn hoá Tây Bắc và cộng đồng dân tộc Thái (Thái Đen, Thái Trắng) tại các địa bàn Sơn La, Điện Biên, Lai Châu, Yên Bái, Hoà Bình.
+    const systemInstruction = `Bạn là trợ lý AI chuyên môn về số hoá và lưu trữ di sản văn hoá phi vật thể Việt Nam trong ứng dụng "Bản đồ di sản phi vật thể theo vùng văn hoá" (Đề tài J02 - Nhóm 1 Đợt 15). 
+Dự án tập trung nghiên cứu: Vùng văn hoá Tây Nguyên và cộng đồng Người Ê Đê (Anak Đê) tại tỉnh Đắk Lắk (Địa bàn khảo sát dự kiến: Xã Cư M'gar).
 
 QUY TẮC BẮT BUỘC VÀ KHÔNG ĐƯỢC VI PHẠM (Được quy định trong Điều 5 và Điều 7 của đề án nghiên cứu):
 1. BẮT BUỘC CHỈ ĐƯỢC TRẢ LỜI DỰA TRÊN DỮ LIỆU ĐƯỢC CUNG CẤP TRONG TỆP disan.json DƯỚI ĐÂY cùng các nguồn tư liệu được khai báo trong mỗi bản ghi.
 2. TUYỆT ĐỐI KHÔNG sử dụng kiến thức bên ngoài, không tự suy đoán, bổ sung hoặc sáng tác thông tin.
 3. Trong MỌI CÂU TRẢ LỜI có chứa thông tin di sản, bạn BẮT BUỘC PHẢI NÊU RÕ 4 YẾU TỐ:
-   - Tên di sản (theo danh mục chính thức và tên gọi bản địa nếu có)
-   - Cộng đồng / Dân tộc sở hữu
-   - Địa danh hiện nay (và địa danh tư liệu nếu có)
+   - Tên di sản (theo danh mục chính thức và tên gọi bản địa tiếng Ê Đê: Ching K'nah, Klei Khan, Klei đúm, Sang đê, v.v.)
+   - Cộng đồng / Dân tộc sở hữu: Người Ê Đê (Anak Đê)
+   - Địa bàn hiện nay tại Đắk Lắk (nêu rõ nếu là địa bàn khảo sát dự kiến xã Cư M'gar)
    - Nguồn tư liệu đã sử dụng (tên tài liệu, đơn vị cung cấp, tác giả, năm công bố)
-4. NẾU DỮ LIỆU ĐƯỢC CUNG CẤP KHÔNG CÓ THÔNG TIN để trả lời câu hỏi, hoặc người dùng hỏi về di sản, nghi lễ, nhân vật, địa danh KHÔNG CÓ trong disan.json, bạn BẮT BUỘC PHẢI TRẢ LỜI RÕ RÀNG:
+4. NẾU DỮ LIỆU ĐƯỢC CUNG CẤP KHÔNG CÓ THÔNG TIN để trả lời câu hỏi, hoặc người dùng hỏi về di sản, nghi lễ, nhân vật, địa danh KHÔNG CÓ trong disan.json (hoặc hỏi về các vùng văn hóa ngoài Tây Nguyên như Tây Bắc, Bắc Bộ, Nam Bộ, hoặc các dân tộc khác như Thái, Mường, Kinh, Chăm, Khmer...), bạn BẮT BUỘC PHẢI TRẢ LỜI RÕ RÀNG:
    "Hiện chưa có tư liệu xác thực để trả lời câu hỏi này trong hệ thống dữ liệu di sản đã được thẩm định."
    (Không được xin lỗi dông dài, không được trả lời từ kiến thức internet).
 5. TUYỆT ĐỐI KHÔNG gán ghép thông tin của cộng đồng hoặc vùng văn hoá này sang cộng đồng hoặc vùng văn hoá khác.
-6. TUYỆT ĐỐI KHÔNG tự tạo tên nghệ nhân, người cung cấp, địa danh, niên đại lịch sử hoặc tình trạng ghi danh khi trong dữ liệu không có.
-7. Nếu câu hỏi liên quan đến nhiều bản ghi, hãy phân biệt rành mạch từng bản ghi kèm nguồn trích dẫn tương ứng.
+6. TUYỆT ĐỐI KHÔNG tự tạo tên nghệ nhân, người cung cấp, buôn làng, niên đại lịch sử hoặc tình trạng ghi danh khi trong dữ liệu không có.
+7. Xã Cư M'gar hiện là địa bàn khảo sát dự kiến, chưa khẳng định toàn xã là cộng đồng đại diện nếu chưa có nguồn thực địa buôn làng.
 8. Toàn bộ câu trả lời bằng tiếng Việt trang trọng, chuẩn mực, tôn trọng văn hoá bản địa và tuân thủ đạo đức nghiên cứu di sản.
 
 DỮ LIỆU DI SẢN CHÍNH THỨC TRONG disan.json:
@@ -170,12 +170,17 @@ ${dataContext}`;
     });
   }
 });
-
 function answerFromGroundTruth(question: string, records: any[]): string {
   const qLower = question.toLowerCase();
 
-  // Explicit check for heritages outside Northwest Thai culture
-  const outsideKeywords = ['chăm', 'katê', 'khmer', 'cồng chiêng', 'tây nguyên', 'quan họ', 'bắc ninh', 'ca trù', 'đờn ca tài tử'];
+  // Explicit check for queries outside Central Highlands (Tây Nguyên) / Ê Đê culture
+  const outsideKeywords = [
+    'xòe thái', 'xoe thai', 'thái đen', 'thái trắng', 'dân tộc thái',
+    'tây bắc', 'sơn la', 'điện biên', 'lai châu', 'yên bái', 'hoà bình',
+    'quan họ', 'bắc ninh', 'ca trù', 'đờn ca tài tử', 'hát xoan', 'hát chầu văn',
+    'nhã nhạc cung đình', 'dân ca ví giặm', 'nghệ tĩnh', 'chăm', 'katê', 'khmer',
+    'chùa dơi', 'bình định', 'thổ hà', 'hát then', 'đàn tính', 'tày', 'nùng'
+  ];
   if (outsideKeywords.some((k) => qLower.includes(k))) {
     return 'Hiện chưa có tư liệu xác thực để trả lời câu hỏi này trong hệ thống dữ liệu di sản đã được thẩm định.';
   }

@@ -40,10 +40,10 @@ export const HomeView: React.FC<HomeViewProps> = ({
     }
   };
 
-  const featuredHeritages = heritages.slice(0, 3);
+  const featuredHeritages = heritages.slice(0, 6);
 
-  const unescoCount = heritages.filter((h) => h.tinh_trang_ghi_danh.includes('UNESCO')).length;
-  const nationalCount = heritages.filter((h) => h.tinh_trang_ghi_danh.includes('quốc gia')).length;
+  const unescoCount = heritages.filter((h) => (h.tinh_trang_ghi_danh || h.tinh_trang_bao_ton || '').includes('UNESCO')).length;
+  const nationalCount = heritages.filter((h) => (h.tinh_trang_ghi_danh || h.tinh_trang_bao_ton || '').includes('quốc gia')).length;
   const validCoordinatesCount = heritages.filter((h) => h.toa_do !== null).length;
 
   return (

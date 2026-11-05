@@ -79,14 +79,30 @@ export const HeritageDetailView: React.FC<HeritageDetailViewProps> = ({
       </div>
 
       {/* Verification & Survey Status Notice */}
-      <div className="p-4 rounded-2xl bg-amber-50 border border-amber-300 text-amber-900 text-xs sm:text-sm flex items-start gap-3 shadow-2xs">
-        <AlertTriangle className="w-5 h-5 text-amber-700 shrink-0 mt-0.5" />
+      <div className={`p-4 rounded-2xl border text-xs sm:text-sm flex items-start gap-3 shadow-2xs ${
+        heritage.trang_thai_tham_dinh === 'Đã xác minh'
+          ? 'bg-emerald-50/80 border-emerald-300 text-emerald-950'
+          : 'bg-amber-50 border-amber-300 text-amber-950'
+      }`}>
+        <AlertTriangle className={`w-5 h-5 shrink-0 mt-0.5 ${
+          heritage.trang_thai_tham_dinh === 'Đã xác minh' ? 'text-emerald-700' : 'text-amber-700'
+        }`} />
         <div className="space-y-1">
-          <div className="font-bold text-amber-950">
-            HỒ SƠ DI SẢN CỘNG ĐỒNG NGƯỜI Ê ĐÊ – TỈNH ĐẮK LẮK
+          <div className="font-bold flex items-center gap-2">
+            <span>HỒ SƠ DI SẢN CỘNG ĐỒNG NGƯỜI Ê ĐÊ – TỈNH ĐẮK LẮK</span>
+            <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${
+              heritage.trang_thai_tham_dinh === 'Đã xác minh'
+                ? 'bg-emerald-700 text-white'
+                : 'bg-amber-700 text-white'
+            }`}>
+              Trạng thái: {heritage.trang_thai_tham_dinh || 'Đang xác minh'}
+            </span>
           </div>
-          <p className="text-amber-900 leading-relaxed text-xs">
-            Trạng thái khảo sát tại Xã Cư M'gar: <strong>{heritage.trang_thai_dia_ban}</strong>. 
+          <p className="leading-relaxed text-xs">
+            <strong>Phạm vi xác minh:</strong> {heritage.pham_vi_xac_minh || 'Đang thẩm định đối chiếu hồ sơ thực địa.'}
+          </p>
+          <p className="leading-relaxed text-xs">
+            Trạng thái địa bàn tại Xã Cư M'gar: <strong>{heritage.trang_thai_dia_ban}</strong>. 
             Buôn/làng ghi nhận: <strong>{heritage.buon_lang || 'Đang xác minh buôn/làng'}</strong>.
             Hệ thống không tự suy đoán buôn làng hoặc nghệ nhân khi chưa có hồ sơ thực địa xác thực.
           </p>
@@ -171,6 +187,19 @@ export const HeritageDetailView: React.FC<HeritageDetailViewProps> = ({
             </p>
           </div>
 
+          {/* Section: Giá trị di sản (Ý nghĩa lịch sử, văn hoá, xã hội) */}
+          {heritage.gia_tri_di_san && (
+            <div className="bg-white p-6 rounded-2xl border border-[#E8DEC8] shadow-xs space-y-3">
+              <h2 className="font-serif font-bold text-lg text-[#3B281B] flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-amber-600"></span>
+                Giá trị Di sản (Ý nghĩa Lịch sử, Văn hoá & Xã hội mẫu hệ)
+              </h2>
+              <p className="text-sm text-[#4A3B32] leading-relaxed">
+                {heritage.gia_tri_di_san}
+              </p>
+            </div>
+          )}
+
           {/* Section: Lịch sử & Nguồn gốc */}
           {heritage.lich_su_nguon_goc && (
             <div className="bg-white p-6 rounded-2xl border border-[#E8DEC8] shadow-xs space-y-3">
@@ -180,6 +209,19 @@ export const HeritageDetailView: React.FC<HeritageDetailViewProps> = ({
               </h2>
               <p className="text-sm text-[#4A3B32] leading-relaxed">
                 {heritage.lich_su_nguon_goc}
+              </p>
+            </div>
+          )}
+
+          {/* Section: Hoạt động truyền dạy & Bảo tồn */}
+          {heritage.hoat_dong_truyen_day && (
+            <div className="bg-white p-6 rounded-2xl border border-[#E8DEC8] shadow-xs space-y-3">
+              <h2 className="font-serif font-bold text-lg text-[#3B281B] flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-emerald-600"></span>
+                Hoạt động Truyền dạy, Thực hành và Bảo tồn di sản
+              </h2>
+              <p className="text-sm text-[#4A3B32] leading-relaxed">
+                {heritage.hoat_dong_truyen_day}
               </p>
             </div>
           )}
@@ -350,6 +392,40 @@ export const HeritageDetailView: React.FC<HeritageDetailViewProps> = ({
             </div>
           </div>
 
+          {/* Record Metadata & Conservation Status Card */}
+          <div className="bg-white p-5 rounded-2xl border border-[#E8DEC8] shadow-xs space-y-3 text-xs">
+            <h3 className="font-serif font-bold text-base text-[#3B281B] flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-[#B33927]"></span>
+              Hồ sơ Quản lý & Tình trạng Bảo tồn
+            </h3>
+            <div className="space-y-2 text-[#524237]">
+              <div>
+                <span className="font-semibold text-[#3B281B]">Mã tư liệu chuẩn:</span>
+                <p className="mt-0.5 font-mono font-bold text-[#B33927]">{heritage.ma_tu_lieu || heritage.id}</p>
+              </div>
+              <div className="pt-2 border-t border-[#F0E8D9]">
+                <span className="font-semibold text-[#3B281B]">Trạng thái thẩm định hồ sơ:</span>
+                <p className="mt-0.5 font-semibold text-[#047857]">{heritage.trang_thai_tham_dinh || 'Đang xác minh'}</p>
+              </div>
+              <div className="pt-2 border-t border-[#F0E8D9]">
+                <span className="font-semibold text-[#3B281B]">Tình trạng bảo tồn hiện trạng:</span>
+                <p className="mt-0.5 text-[#2C1D13] font-medium">{heritage.tinh_trang_bao_ton || heritage.tinh_trang_ghi_danh}</p>
+              </div>
+              <div className="pt-2 border-t border-[#F0E8D9]">
+                <span className="font-semibold text-[#3B281B]">Địa danh lịch sử ghi nhận:</span>
+                <p className="mt-0.5 italic">{heritage.dia_danh_lich_su || heritage.dia_danh_tu_lieu || 'Đang đối chiếu tài liệu cũ'}</p>
+              </div>
+              <div className="pt-2 border-t border-[#F0E8D9]">
+                <span className="font-semibold text-[#3B281B]">Người thu thập & Ngày thu thập:</span>
+                <p className="mt-0.5 text-[#4A3B32]">{heritage.nguoi_thu_thap || 'Nguyễn Văn An (PH70154)'} ({heritage.ngay_thu_thap || '05/11/2026'})</p>
+              </div>
+              <div className="pt-2 border-t border-[#F0E8D9] flex items-center justify-between">
+                <span className="font-semibold text-[#3B281B]">Thời gian cập nhật:</span>
+                <span className="font-mono text-[11px] text-[#7A695B]">{heritage.thoi_gian_cap_nhat || '05/11/2026'}</span>
+              </div>
+            </div>
+          </div>
+
           {/* Master Artisans & Practitioners */}
           <div className="bg-white p-5 rounded-2xl border border-[#E8DEC8] shadow-xs space-y-3 text-xs">
             <h3 className="font-serif font-bold text-base text-[#3B281B] flex items-center gap-2">
@@ -393,7 +469,7 @@ export const HeritageDetailView: React.FC<HeritageDetailViewProps> = ({
 
               <div className="pt-2 border-t border-[#F0E8D9]">
                 <span className="font-semibold text-[#3B281B]">Phạm vi được phép sử dụng:</span>
-                <p className="mt-0.5 text-[#6B5A4D]">{heritage.pham_vi_duoc_phep_su_dung}</p>
+                <p className="mt-0.5 text-[#6B5A4D]">{heritage.quyen_su_dung || heritage.pham_vi_duoc_phep_su_dung}</p>
               </div>
             </div>
           </div>

@@ -55,9 +55,9 @@ export const TransmissionView: React.FC<TransmissionViewProps> = ({
           <h1 className="text-2xl sm:text-3xl font-serif font-bold text-[#3B281B]">
             Thực hành & Trao truyền Di sản trong Cộng đồng
           </h1>
-          <p className="text-sm text-[#6C5B4E] mt-1 max-w-3xl">
-            Tập hợp các lớp học, câu lạc bộ bảo tồn và hoạt động truyền dạy của nghệ nhân người Thái cho thế hệ trẻ. 
-            Mọi thông tin hoạt động và nghệ nhân đều được dẫn chiếu từ các tư liệu xác thực tại địa phương.
+          <p className="text-sm text-[#6C5B4E] mt-1 max-w-3xl leading-relaxed">
+            Tập hợp các lớp học, câu lạc bộ bảo tồn và hoạt động truyền dạy của nghệ nhân người Ê Đê cho thế hệ trẻ tại tỉnh Đắk Lắk. 
+            Mọi thông tin hoạt động và nghệ nhân đều được trích dẫn từ các tư liệu xác thực tại địa phương và cơ quan chuyên môn.
           </p>
         </div>
 
@@ -85,9 +85,9 @@ export const TransmissionView: React.FC<TransmissionViewProps> = ({
               className="w-full bg-[#FAF7F2] border border-[#D5C6AF] text-[#3B281B] text-xs rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#B33927] focus:outline-hidden"
             >
               <option value="Tất cả">Tất cả địa phương</option>
-              <option value="Sơn La">Sơn La (Quỳnh Nhai, Thuận Châu, Mai Sơn)</option>
-              <option value="Nghĩa Lộ">Nghĩa Lộ (Yên Bái)</option>
-              <option value="Điện Biên">Điện Biên</option>
+              <option value="Cư M'gar">Huyện Cư M'gar (Địa bàn khảo sát dự kiến)</option>
+              <option value="Buôn Ma Thuột">TP. Buôn Ma Thuột</option>
+              <option value="Đắk Lắk">Toàn tỉnh Đắk Lắk</option>
             </select>
           </div>
 
@@ -99,10 +99,11 @@ export const TransmissionView: React.FC<TransmissionViewProps> = ({
               className="w-full bg-[#FAF7F2] border border-[#D5C6AF] text-[#3B281B] text-xs rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#B33927] focus:outline-hidden"
             >
               <option value="Tất cả">Tất cả loại hình</option>
-              <option value="Nghệ thuật trình diễn dân gian">Trình diễn dân gian</option>
-              <option value="Tiếng nói, chữ viết">Tiếng nói, chữ viết</option>
-              <option value="Lễ hội truyền thống">Lễ hội truyền thống</option>
-              <option value="Nghề thủ công truyền thống">Nghề thủ công truyền thống</option>
+              <option value="Nghệ thuật trình diễn dân gian">Trình diễn dân gian (Cồng chiêng)</option>
+              <option value="Ngữ văn dân gian">Ngữ văn dân gian (Sử thi, Lời nói vần)</option>
+              <option value="Tập quán xã hội và tín ngưỡng">Tập quán xã hội và tín ngưỡng</option>
+              <option value="Nghề thủ công truyền thống">Nghề thủ công truyền thống (Dệt thổ cẩm, Đan lát)</option>
+              <option value="Tri thức dân gian">Tri thức dân gian (Nhà dài, Rượu cần)</option>
             </select>
           </div>
         </div>

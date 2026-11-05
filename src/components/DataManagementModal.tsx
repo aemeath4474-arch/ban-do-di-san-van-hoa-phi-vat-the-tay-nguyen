@@ -37,28 +37,34 @@ export const DataManagementModal: React.FC<DataManagementModalProps> = ({
   // New Heritage Form State
   const initialNewHeritage: DiSan = {
     id: `DS-TN-EDE-${Date.now().toString().slice(-4)}`,
-    la_du_lieu_minh_hoa: false,
-    ghi_chu_minh_hoa: '',
+    ma_tu_lieu: `DS-TN-EDE-${Date.now().toString().slice(-4)}`,
+    la_du_lieu_minh_hoa: true,
+    ghi_chu_minh_hoa: 'Ảnh minh họa tư liệu loại hình di sản.',
     ten_di_san: '',
     ten_ban_dia: '',
     chu_giai_ten_ban_dia: '',
     loai_hinh: 'Nghệ thuật trình diễn dân gian',
     vung_van_hoa: 'Tây Nguyên',
     dan_toc: 'Người Ê Đê',
+    cong_dong_chu_the: 'Cộng đồng người Ê Đê (Anak Đê)',
     tinh_thanh: 'Tỉnh Đắk Lắk',
     huyen_thi: 'Huyện Cư M\'gar',
     xa_phuong: 'Xã Cư M\'gar (Địa bàn khảo sát dự kiến)',
     buon_lang: 'Đang xác minh buôn/làng',
     trang_thai_dia_ban: 'Địa bàn khảo sát dự kiến',
     dia_danh_hien_nay: 'Xã Cư M\'gar, Huyện Cư M\'gar, Tỉnh Đắk Lắk',
+    dia_danh_lich_su: '',
     dia_danh_tu_lieu: '',
     mo_ta: '',
+    gia_tri_di_san: '',
     lich_su_nguon_goc: '',
     boi_canh_thuc_hanh: '',
     nghe_nhan_nguoi_thuc_hanh: [''],
     nguoi_cung_cap: 'Sở Văn hoá, Thể thao và Du lịch tỉnh Đắk Lắk',
-    pham_vi_duoc_phep_su_dung: 'Sử dụng phi thương mại cho nghiên cứu và giáo dục di sản',
+    pham_vi_duoc_phep_su_dung: 'Sử dụng phi thương mại cho nghiên cứu và giáo dục di sản đề tài J02',
     tinh_trang_ghi_danh: 'Di sản văn hoá phi vật thể quốc gia',
+    tinh_trang_bao_ton: 'Đang duy trì và bảo tồn',
+    hoat_dong_truyen_day: '',
     hinh_anh: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=1200&q=80',
     am_thanh: '',
     video: '',
@@ -72,6 +78,13 @@ export const DataManagementModal: React.FC<DataManagementModalProps> = ({
         duong_dan: '',
       },
     ],
+    duong_dan_nguon: '',
+    ngay_thu_thap: '05/11/2026',
+    nguoi_thu_thap: 'Nguyễn Văn An (PH70154)',
+    quyen_su_dung: 'Sử dụng phi thương mại cho nghiên cứu và giáo dục di sản đề tài J02',
+    trang_thai_tham_dinh: 'Đã có nhưng cần xác minh',
+    pham_vi_xac_minh: 'Đang xác minh thực địa buôn làng tại địa bàn xã Cư M\'gar.',
+    thoi_gian_cap_nhat: '05/11/2026',
     toa_do: {
       vi_do: 12.8256,
       kinh_do: 108.0617,
@@ -317,8 +330,8 @@ export const DataManagementModal: React.FC<DataManagementModalProps> = ({
                 Nếu chưa có nguồn xác minh buôn, để trạng thái <em>"Đang xác minh địa bàn"</em>.
               </div>
 
-              {/* Status Flag */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-3 rounded-xl bg-[#FAF7F2] border border-[#E8DEC8]">
+              {/* Verification & Survey Status Controls */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-3 rounded-xl bg-[#FAF7F2] border border-[#E8DEC8]">
                 <div>
                   <label className="block font-semibold text-[#3B281B] mb-1">Trạng thái địa bàn khảo sát *</label>
                   <select
@@ -333,6 +346,19 @@ export const DataManagementModal: React.FC<DataManagementModalProps> = ({
                 </div>
 
                 <div>
+                  <label className="block font-semibold text-[#3B281B] mb-1">Trạng thái thẩm định *</label>
+                  <select
+                    value={formData.trang_thai_tham_dinh}
+                    onChange={(e) => setFormData({ ...formData, trang_thai_tham_dinh: e.target.value as any })}
+                    className="w-full px-3 py-2 rounded-lg bg-white border border-[#D5C6AF] font-medium"
+                  >
+                    <option value="Đã xác minh">Đã xác minh</option>
+                    <option value="Đã có nhưng cần xác minh">Đã có nhưng cần xác minh</option>
+                    <option value="Chưa xác minh">Chưa xác minh</option>
+                  </select>
+                </div>
+
+                <div>
                   <label className="block font-semibold text-[#3B281B] mb-1">Buôn / Làng cụ thể (nếu có nguồn)</label>
                   <input
                     type="text"
@@ -342,6 +368,19 @@ export const DataManagementModal: React.FC<DataManagementModalProps> = ({
                     className="w-full px-3 py-2 rounded-lg bg-white border border-[#D5C6AF]"
                   />
                 </div>
+              </div>
+
+              {/* Verification Scope Input */}
+              <div className="p-3 rounded-xl bg-[#FAF7F2] border border-[#E8DEC8]">
+                <label className="block font-semibold text-[#3B281B] mb-1">Phạm vi xác minh (Ghi rõ nội dung đã kiểm chứng và thông tin còn thiếu) *</label>
+                <input
+                  type="text"
+                  required
+                  value={formData.pham_vi_xac_minh || ''}
+                  onChange={(e) => setFormData({ ...formData, pham_vi_xac_minh: e.target.value })}
+                  placeholder="Ví dụ: Đã xác minh tên di sản, hồ sơ quốc gia; đang xác minh nghệ nhân thực hành tại xã Cư M'gar..."
+                  className="w-full px-3 py-2 rounded-lg bg-white border border-[#D5C6AF]"
+                />
               </div>
 
               {/* Grid Inputs for required fields */}
@@ -474,6 +513,72 @@ export const DataManagementModal: React.FC<DataManagementModalProps> = ({
                   onChange={(e) => setFormData({ ...formData, mo_ta: e.target.value })}
                   className="w-full px-3 py-2 rounded-lg bg-[#FAF7F2] border border-[#D5C6AF]"
                 />
+              </div>
+
+              <div>
+                <label className="block font-semibold text-[#3B281B] mb-1">Giá trị di sản (Ý nghĩa lịch sử, văn hoá, xã hội mẫu hệ)</label>
+                <textarea
+                  rows={2}
+                  value={formData.gia_tri_di_san || ''}
+                  onChange={(e) => setFormData({ ...formData, gia_tri_di_san: e.target.value })}
+                  placeholder="Giá trị nghệ thuật, biểu tượng đoàn kết buôn làng..."
+                  className="w-full px-3 py-2 rounded-lg bg-[#FAF7F2] border border-[#D5C6AF]"
+                />
+              </div>
+
+              <div>
+                <label className="block font-semibold text-[#3B281B] mb-1">Hoạt động truyền dạy, thực hành & bảo tồn</label>
+                <textarea
+                  rows={2}
+                  value={formData.hoat_dong_truyen_day || ''}
+                  onChange={(e) => setFormData({ ...formData, hoat_dong_truyen_day: e.target.value })}
+                  placeholder="Lớp truyền dạy buôn làng, truyền khẩu gia đình mẫu hệ..."
+                  className="w-full px-3 py-2 rounded-lg bg-[#FAF7F2] border border-[#D5C6AF]"
+                />
+              </div>
+
+              {/* Preservation, Historical and Collector info */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3.5 rounded-xl bg-[#FAF7F2] border border-[#E8DEC8]">
+                <div>
+                  <label className="block font-semibold text-[#3B281B] mb-1">Địa danh lịch sử ghi nhận</label>
+                  <input
+                    type="text"
+                    value={formData.dia_danh_lich_su || ''}
+                    onChange={(e) => setFormData({ ...formData, dia_danh_lich_su: e.target.value })}
+                    placeholder="Ví dụ: Vùng Đàng Gar cổ, Buôn Kram..."
+                    className="w-full px-3 py-2 rounded-lg bg-white border border-[#D5C6AF]"
+                  />
+                </div>
+                <div>
+                  <label className="block font-semibold text-[#3B281B] mb-1">Tình trạng bảo tồn hiện trạng</label>
+                  <input
+                    type="text"
+                    value={formData.tinh_trang_bao_ton || ''}
+                    onChange={(e) => setFormData({ ...formData, tinh_trang_bao_ton: e.target.value })}
+                    placeholder="Ví dụ: Được bảo tồn tốt, Có nguy cơ mai một..."
+                    className="w-full px-3 py-2 rounded-lg bg-white border border-[#D5C6AF]"
+                  />
+                </div>
+                <div>
+                  <label className="block font-semibold text-[#3B281B] mb-1">Người thu thập & Ngày thu thập</label>
+                  <input
+                    type="text"
+                    value={formData.nguoi_thu_thap || ''}
+                    onChange={(e) => setFormData({ ...formData, nguoi_thu_thap: e.target.value })}
+                    placeholder="Nguyễn Văn An (PH70154)"
+                    className="w-full px-3 py-2 rounded-lg bg-white border border-[#D5C6AF]"
+                  />
+                </div>
+                <div>
+                  <label className="block font-semibold text-[#3B281B] mb-1">Quyền sử dụng tư liệu</label>
+                  <input
+                    type="text"
+                    value={formData.quyen_su_dung || ''}
+                    onChange={(e) => setFormData({ ...formData, quyen_su_dung: e.target.value })}
+                    placeholder="Sử dụng phi thương mại cho nghiên cứu..."
+                    className="w-full px-3 py-2 rounded-lg bg-white border border-[#D5C6AF]"
+                  />
+                </div>
               </div>
 
               {/* Coordinates Section */}

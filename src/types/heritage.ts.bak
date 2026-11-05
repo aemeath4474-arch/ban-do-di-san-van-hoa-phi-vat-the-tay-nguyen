@@ -1,0 +1,105 @@
+export interface NguonTuLieu {
+  ten_tai_lieu: string;
+  don_vi_cung_cap: string;
+  tac_gia_nguoi_ghi_nhan: string;
+  nam_cong_bo: string;
+  loai_nguon: 'Chính thức' | 'Nghiên cứu' | 'Cộng đồng cung cấp';
+  duong_dan?: string;
+}
+
+export interface ToaDo {
+  vi_do: number;
+  kinh_do: number;
+  ten_dia_diem: string;
+}
+
+export interface DiSan {
+  // 1. Mã tư liệu (Mã định danh duy nhất)
+  id: string;
+  ma_tu_lieu?: string;
+
+  // Dữ liệu thẩm định / nhãn minh họa
+  la_du_lieu_minh_hoa?: boolean;
+  ghi_chu_minh_hoa?: string;
+
+  // 2. Tên di sản (Chính thức và tên gọi trong cộng đồng)
+  ten_di_san: string;
+  ten_ban_dia: string;
+  chu_giai_ten_ban_dia?: string;
+
+  // 3. Loại hình di sản
+  loai_hinh: string;
+  
+  // 4. Cộng đồng chủ thể & 5. Vùng văn hóa & 6. Tỉnh/Thành phố
+  dan_toc: string; // "Người Ê Đê"
+  cong_dong_chu_the?: string;
+  vung_van_hoa: string; // "Tây Nguyên"
+  tinh_thanh: string; // "Tỉnh Đắk Lắk"
+  huyen_thi: string; // "Huyện Cư M'gar" | "TP. Buôn Ma Thuột" | ...
+  xa_phuong: string; // "Xã Cư M'gar (Địa bàn khảo sát dự kiến)" | ...
+  buon_lang: string; // Tên buôn xác thực hoặc "Đang xác minh buôn/làng"
+  trang_thai_dia_ban: 'Đã xác minh' | 'Đang xác minh địa bàn' | 'Địa bàn khảo sát dự kiến';
+
+  // 7. Địa danh hiện nay & 8. Địa danh lịch sử
+  dia_danh_hien_nay: string;
+  dia_danh_tu_lieu: string;
+  dia_danh_lich_su?: string;
+
+  // 9. Nội dung mô tả & 10. Giá trị di sản
+  mo_ta: string;
+  gia_tri_di_san?: string;
+  lich_su_nguon_goc: string;
+  boi_canh_thuc_hanh: string;
+
+  // Nghệ nhân & người cung cấp
+  nghe_nhan_nguoi_thuc_hanh: string[];
+  nguoi_cung_cap: string;
+  pham_vi_duoc_phep_su_dung: string;
+
+  // 11. Hình ảnh & 12. Video & Âm thanh
+  hinh_anh: string;
+  am_thanh?: string;
+  video?: string;
+
+  // 13. Tình trạng bảo tồn
+  tinh_trang_ghi_danh: string;
+  tinh_trang_bao_ton?: string;
+
+  // 14. Hoạt động truyền dạy
+  hoat_dong_truyen_day?: string;
+
+  // 15. Nguồn tư liệu & 16. Đường dẫn nguồn
+  nguon_tu_lieu: NguonTuLieu[];
+  duong_dan_nguon?: string;
+
+  // 17. Thời gian cập nhật
+  thoi_gian_cap_nhat?: string;
+
+  // Tọa độ GPS gắn với địa bàn thực tế
+  toa_do: ToaDo | null;
+}
+
+export interface HoatDongTruyenDay {
+  id: string;
+  ten_hoat_dong: string;
+  di_san_lien_quan_id: string;
+  nghe_nhan_huong_dan: string;
+  don_vi_to_chuc: string;
+  dia_diem: string;
+  thoi_gian: string;
+  doi_tuong_tham_gia: string;
+  mo_ta: string;
+  loai_hinh: string;
+  dia_phuong: string;
+  nguon_xac_thuc: string;
+}
+
+export type ManHinhId =
+  | 'trang-chu'
+  | 'ban-do'
+  | 'danh-sach'
+  | 'chi-tiet'
+  | 'truyen-day'
+  | 'hoi-dap-gemini'
+  | 'nguon-tu-lieu'
+  | 'gioi-thieu';
